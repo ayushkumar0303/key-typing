@@ -1,6 +1,9 @@
 const btn = document.getElementById("startBtn");
 const textArea = document.getElementById("textArea");
 const paragraph = document.getElementById("randomParagraph");
+const time = document.getElementById("time");
+const speed = document.getElementById("speed");
+const accuracy = document.getElementById("accuracy");
 // console.dir(btn);
 // console.log(textArea);
 // console.log(paragraph);
@@ -29,7 +32,9 @@ const paraArray = [...para];
 
 let firstKeyPressed = false,
   start,
-  index = 0;
+  index = 0,
+  wrongChar = 0,
+  endTime;
 document.addEventListener("keyup", function (event) {
   if (!firstKeyPressed) {
     start = performance.now();
@@ -38,9 +43,9 @@ document.addEventListener("keyup", function (event) {
 });
 
 textArea.addEventListener("input", function (event) {
-  console.log(event.data);
-  console.log(paraArray);
-  console.log(index);
+  // console.log(event.data);
+  // console.log(paraArray);
+  // console.log(index);
 
   if (paraArray[index] == event.data) {
     const result = paraArray
@@ -53,9 +58,24 @@ textArea.addEventListener("input", function (event) {
       })
       .join("");
     index++;
+    if (index == para.length) {
+      // textArea.setAttribute("readonly", "true");
+      textArea.readOnly = true;
+
+      endTime = performance.now();
+      const totalTime = Math.ceil((endTime - start) / 1000);
+      time.innerText = `${totalTime}s`;
+
+      const acc = Math.ceil(((para.length - wrongChar) * 100) / para.length);
+      accuracy.innerText = `${acc}%`;
+
+      const sp = Math.ceil((para.length * 60) / totalTime);
+      speed.innerText = `${sp}CPM`;
+    }
 
     paragraph.innerHTML = result;
   } else {
+    wrongChar++;
     const result = paraArray
       .map((char, idx) => {
         if (index == idx) {
