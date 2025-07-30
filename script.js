@@ -22,5 +22,50 @@ const arr = [
 
 const randInd = Math.round(Math.random() * 11);
 // console.log(randInd);
+const para = arr[randInd];
+paragraph.innerText = para;
 
-paragraph.innerText = arr[randInd];
+const paraArray = [...para];
+
+let firstKeyPressed = false,
+  start,
+  index = 0;
+document.addEventListener("keyup", function (event) {
+  if (!firstKeyPressed) {
+    start = performance.now();
+    firstKeyPressed = true;
+  }
+});
+
+textArea.addEventListener("input", function (event) {
+  console.log(event.data);
+  console.log(paraArray);
+  console.log(index);
+
+  if (paraArray[index] == event.data) {
+    const result = paraArray
+      .map((char, idx) => {
+        if (index == idx) {
+          return `<span style="background-color:lightgreen;">${char}</span>`;
+        } else {
+          return `<span>${char}</span>`;
+        }
+      })
+      .join("");
+    index++;
+
+    paragraph.innerHTML = result;
+  } else {
+    const result = paraArray
+      .map((char, idx) => {
+        if (index == idx) {
+          return `<span style="background-color:red;">${char}</span>`;
+        } else {
+          return `<span>${char}</span>`;
+        }
+      })
+      .join("");
+
+    paragraph.innerHTML = result;
+  }
+});
